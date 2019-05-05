@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="myCanvas" width="600px" height="600px" style="border: 1px solid #000000"></canvas>;
+<script>
+    function circle(x,y,radius,dx,dy) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.dx = dx;
+        this.dy = dy;
+        let self = this;
+        let canvas = document.getElementById('myCanvas');
+        let context = canvas.getContext('2d');
+        this.draw = function (Line) {
+            context.beginPath();
+            context.fillStyle="#0000ff";
+            context.clearRect(self.x-10-self.dx,self.y-10-self.dy,20,20);
+            context.arc(self.x,self.y,self.radius,0,Math.PI*2,false);
+            context.closePath();
+            context.fill();
+            if( self.x<5 || self.x>595) self.dx = -self.dx;
+            if( self.y<5 || (self.y == 485 && self.x > Line.a && self.x < Line.b)) self.dy = -self.dy;
+            self.x += self.dx;
+            self.y += self.dy;
+            if (self.y == 595) {
+                alert("Game over");
+                
+
+            }
+
+
+
+        }
+
+
+
+
+    }
+
+    function line(a,b) {
+        this.a = a;
+        this.b = b;
+        let self = this;
+        let canvas = document.getElementById('myCanvas');
+        let ctx = canvas.getContext('2d');
+        this.paint = function () {
+            ctx.beginPath();
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 10;
+            ctx.moveTo(this.a,500);
+            ctx.lineTo(this.b,500);
+            ctx.stroke();
+
+        };
+
+
+        document.addEventListener("keydown", function (e) {
+            switch (e.which) {
+                case 37:
+                    if(self.a > 1 ) {
+                        ctx.clearRect(self.b - 10, 495, 20, 10)
+                        self.a -= 10;
+                        self.b -= 10;
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'blue';
+                        ctx.lineWidth = 10;
+                        ctx.moveTo(self.a, 500);
+                        ctx.lineTo(self.b, 500);
+                        ctx.stroke();
+                        break;
+                    }
+
+                case 39:
+                    if(self.b < 600) {
+                        ctx.clearRect(self.a, 495, 20, 10)
+                        self.a += 10;
+                        self.b += 10;
+                        ctx.beginPath();
+                        ctx.strokeStyle = 'blue';
+                        ctx.lineWidth = 10;
+                        ctx.moveTo(self.a, 500);
+                        ctx.lineTo(self.b, 500);
+                        ctx.stroke();
+                        break;
+                    }
+
+            }     });
+
+
+    }
+
+
+
+
+
+
+    let Line = new line(250,350);
+    let Circle = new circle(100,200,10,1,1);
+    Line.paint();
+    Circle.draw(Line);
+
+    setInterval((function (){Circle.draw(Line)}),5);
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
